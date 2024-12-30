@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Management Navbar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+        <style>
+            * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-image: url("https://png.pngtree.com/thumb_back/fw800/background/20240610/pngtree-concept-of-notes-goals-memo-or-action-plan-image_15746380.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+
+        }
+
+        .navbar {
+            background-color: #35424a;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        </style>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+          <center><h3>{{ message }}</h3></center>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">NotesApp</h1>
+            <ul class="nav-links">
+                <li><a href="{{url_for('viewallnotes')}}">ViewallNotes</a></li>
+                <li><a href="{{url_for('addnotes')}}">Add Note</a></li>
+                <li><a href="{{url_for('uploadfile')}}">Add file</a></li>
+                <li><a href="{{url_for('viewallfiles')}}">Viewallfiles</a></li>
+                <li><a href="{{url_for('getexceldata')}}">Get Excel</a></li>
+                <li><a href="{{url_for('logout')}}">Logout</a></li>
+                
+            </ul>
+            <form class="d-flex" action="{{url_for('search')}}" method="post">
+                <input class="form-control me-2" type="'search" name="sname" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-danger" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+</body>
+{% block content %}{% endblock %}
+{% if sdata %}
+<table>
+    <thead>
+        <tr>
+            <th>Notesid</th>
+            <th>Title</th>
+            <th>created_at</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <!-- Example rows -->
+     {% for i in sdata %}
+    <tr>
+        <td>{{i[0]}}</td>
+        <td>{{i[1]}}</td>
+        <td>{{i[3]}}</td>
+
+        <td><a href="{{url_for('viewnotes',nid=i[0])}}" class="button">View</a></td>
+        <td><a href="{{url_for('updatenotes',nid=i[0])}}" class="button update">Update</a></td>
+        <td><a href="{{url_for('deletenotes',nid=i[0])}}" class="button delete">Delete</a></td>
+    </tr>
+    {% endfor %}
+    <!-- Add more rows as needed -->
+</table>
+{% endif %}
+</html>
